@@ -1,0 +1,41 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: analytics
+  description: An example of a Backstage application.
+  # Example for optional annotations
+  # annotations:
+  #   github.com/project-slug: backstage/backstage
+  #   backstage.io/techdocs-ref: dir:.
+spec:
+  type: website
+  owner: john@example.com
+  lifecycle: experimental
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: my-team # Nome do seu grupo (ex: frontend-squad, platform-eng)
+  description: O meu time de desenvolvimento no Backstage.
+spec:
+  type: team # Pode ser 'team', 'business-unit', 'engineering-org', etc.
+  profile:
+    displayName: Meu Time # Nome amigável que aparece na UI
+    email: meu-time@minhaempresa.com # Email de contato do grupo
+    picture: https://example.com/team-avatar.jpg # URL para uma imagem do grupo (opcional)
+  children: [] # Se este grupo tiver subgrupos, liste-os aqui. Ex: ['sub-team-a']
+  members:
+    - user: raphael-nogueira # O nome do usuário que será membro deste grupo
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: raphanogueira # O ID único do seu usuário (geralmente lowercase, sem espaços)
+  title: Raphael Nogueira
+  description: Raphael Nogueira
+spec:
+  profile:
+    displayName: Raphael Nogueira # Nome completo que aparece na UI
+    email: raphael_dc1nogueira@hotmail.com.br # E-mail do usuário
+  memberOf:
+    - my-team # O grupo ao qual este usuário pertence (deve corresponder ao 'name' do Group acima)

@@ -1,0 +1,57 @@
+{
+  "name": "@raphanogueira/plugin-analytics-internal-backend",
+  "version": "0.49.0",
+  "license": "ISC",
+  "main": "dist/index.cjs.js",
+  "types": "dist/index.d.ts",
+  "publishConfig": {
+    "access": "public",
+    "main": "dist/index.cjs.js",
+    "types": "dist/index.d.ts"
+  },
+  "backstage": {
+    "role": "backend-plugin",
+    "pluginId": "analytics-internal-backend"
+  },
+  "sideEffects": false,
+  "scripts": {
+    "start": "backstage-cli package start",
+    "build": "backstage-cli package build && node scripts/copy-migrations.js",
+    "lint": "backstage-cli package lint",
+    "test": "backstage-cli package test",
+    "clean": "backstage-cli package clean",
+    "prepack": "backstage-cli package prepack",
+    "postpack": "backstage-cli package postpack",
+    "typecheck": "tsc --noEmit",
+    "migrate": "knex migrate:latest --knexfile knexfile.js",
+    "migrate:rollback": "knex migrate:rollback --knexfile knexfile.js",
+    "migrate:make": "knex migrate:make --knexfile knexfile.js"
+  },
+  "dependencies": {
+    "@backstage/backend-common": "^0.19.0",
+    "@backstage/backend-plugin-api": "^0.6.0",
+    "@backstage/config": "^1.0.8",
+    "express": "^4.18.2",
+    "express-promise-router": "^4.1.1",
+    "knex": "^3.1.0",
+    "pg": "^8.11.3",
+    "winston": "^3.11.0"
+  },
+  "devDependencies": {
+    "@backstage/backend-test-utils": "^0.2.0",
+    "@backstage/cli": "^0.22.9",
+    "@types/express": "^4.17.21",
+    "@types/jest": "^29.5.11",
+    "@types/node": "^20.10.5",
+    "@types/pg": "^8.10.9",
+    "@types/supertest": "^6.0.2",
+    "jest": "^29.7.0",
+    "msw": "^2.2.1",
+    "supertest": "^6.3.4",
+    "ts-jest": "^29.1.1",
+    "typescript": "^5.3.3"
+  },
+  "files": [
+    "dist"
+  ]
+}
