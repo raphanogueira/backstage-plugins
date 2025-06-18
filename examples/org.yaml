@@ -29,17 +29,16 @@ spec:
     picture: https://example.com/team-avatar.jpg # URL para uma imagem do grupo (opcional)
   children: [] # Se este grupo tiver subgrupos, liste-os aqui. Ex: ['sub-team-a']
   members:
-    - user: raphael-nogueira # O nome do usuário que será membro deste grupo
+    - user: your-git-user # O nome do usuário que será membro deste grupo
 ---
 apiVersion: backstage.io/v1alpha1
 kind: User
 metadata:
-  name: raphanogueira # O ID único do seu usuário (geralmente lowercase, sem espaços)
-  title: Raphael Nogueira
-  description: Raphael Nogueira
+  name: your-git-user # O ID único do seu usuário (geralmente lowercase, sem espaços)
+  title: Your Completed Name
 spec:
   profile:
-    displayName: Raphael Nogueira # Nome completo que aparece na UI
-    email: raphael_dc1nogueira@hotmail.com.br # E-mail do usuário
+    displayName: Your Completed Name # Nome completo que aparece na UI
+    email: your-email@email.com # E-mail do usuário
   memberOf:
     - my-team # O grupo ao qual este usuário pertence (deve corresponder ao 'name' do Group acima)
