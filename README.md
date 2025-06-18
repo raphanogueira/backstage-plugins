@@ -146,7 +146,6 @@ Executar o backstage com `yarn start`
 
 No arquivo [org.yaml](./examples/org.yaml) alterar as seguintes informações
 
-|---|---|---|
 |Campo|Valor|Descrição|
 |User.Metadata.Name| your-github-name | Utilizar o seu nome de usuário no github |
 |User.Metadata.Title| Your Completed Name| Utilizar seu nome completo |
@@ -156,7 +155,6 @@ No arquivo [org.yaml](./examples/org.yaml) alterar as seguintes informações
 
 No arquivo [app-config.yaml](app-config.yaml) realizar as seguintes alterações
 
-|---|---|---|
 |Campo|Valor|Descrição|
 |${GITHUB_CLIENT_ID}| [GitHubClientId](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app) | Client Id gerada dentro do seu OAuth App no GitHub |
 |${GITHUB_CLIENT_SECRET}| [GitHubClientSecret](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app) | Secret gerada dentro do seu OAuth App no GitHub |
