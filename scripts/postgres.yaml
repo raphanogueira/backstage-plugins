@@ -1,0 +1,78 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: postgres-secret
+type: Opaque
+data:
+  # A senha precisa estar em Base64.
+  # O valor abaixo é o resultado de: echo -n 'your-super-secure-password' | base64
+  postgres-password: eW91ci1zdXBlci1zZWN1cmUtcGFzc3dvcmQ=
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pvc
+spec:
+  # ReadWriteOnce significa que o volume pode ser montado como leitura/escrita por um único nó.
+  # Isso é padrão e adequado para um banco de dados single-instance.
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      # Solicita 5 Gigabytes de armazenamento. Ajuste conforme necessário.
+      storage: 5Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:15 # Use uma versão de imagem estável
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: "mydatabase"
+            - name: POSTGRES_USER
+              value: "myuser"
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  # O nome do Secret que criamos
+                  name: postgres-secret
+                  # A chave dentro do Secret que contém a senha
+                  key: postgres-password
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgres-storage
+      volumes:
+        - name: postgres-storage
+          persistentVolumeClaim:
+            # O nome do PVC que criamos
+            claimName: postgres-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-service
+spec:
+  type: ClusterIP # Padrão. Expõe o serviço apenas dentro do cluster.
+  selector:
+    # Este seletor direciona o tráfego para os Pods com a label 'app: postgres'
+    app: postgres
+  ports:
+    - protocol: TCP
+      port: 5432       # A porta pela qual o serviço será acessado
+      targetPort: 5432 # A porta no contêiner para onde o tráfego será enviado
