@@ -56,8 +56,13 @@ jobs:
         with:
           node-version: '20'
           cache: 'yarn'
+
+      - name: Ativar Corepack para usar a versão correta do Yarn
+        run: corepack enable
+        
       - name: Instalar Dependências
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
+
       - name: Construir todo o monorepo
         run: |
           yarn tsc
@@ -88,13 +93,16 @@ jobs:
           node-version: '20'
           registry-url: 'https://registry.npmjs.org'
 
+      - name: Ativar Corepack para usar a versão correta do Yarn
+        run: corepack enable
+
       - name: Baixar artefatos de build
         uses: actions/download-artifact@v4
         with:
           name: build-artifacts
-
+      
       - name: Instalar Dependências de Produção
-        run: yarn install --frozen-lockfile --production
+        run: yarn install --immutable --production
 
       - name: Publicar no NPM (${{ matrix.plugin_dir }})
         run: npm publish --access public
