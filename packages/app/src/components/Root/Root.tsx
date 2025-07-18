@@ -27,7 +27,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import { MyGroupsSidebarItem } from '@backstage/plugin-org';
 import GroupIcon from '@material-ui/icons/People';
-import MatricIcon from '@material-ui/icons/BarChart'
+import MetricIcon from '@material-ui/icons/BarChart'
 
 const useSidebarLogoStyles = makeStyles({
   root: {
@@ -76,7 +76,7 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
         <SidebarItem icon={ExtensionIcon} to="api-docs" text="APIs" />
         <SidebarItem icon={LibraryBooks} to="docs" text="Docs" />
         <SidebarItem icon={CreateComponentIcon} to="create" text="Create..." />
-        <SidebarItem icon={MatricIcon} to="analytics-internal" text="Métricas" />
+        <SidebarItem icon={MetricIcon} to="analytics-internal" text="Metrics" />
         {/* End global nav */}
         <SidebarDivider />
         <SidebarScrollWrapper>

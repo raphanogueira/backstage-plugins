@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Box, Grid, Typography } from '@mui/material';
 import { configApiRef, useApi } from '@backstage/core-plugin-api';
@@ -104,9 +104,9 @@ export const AnalyticsInternalDetails = ({ formatDateToShort = true }: Analytics
         <Page themeId="tool">
             <Header
                 title=""
-                subtitle="Estes são os detalhes da atividade selecionada">
+                subtitle="These are the details of the selected activity">
                 <Typography variant="h4">
-                    Detalhes da Atividade:{' '}
+                    Activity Details:{' '}
                     <Box component="span" fontWeight="fontWeightBold">
                         {insight!.action}
                     </Box>
@@ -115,32 +115,32 @@ export const AnalyticsInternalDetails = ({ formatDateToShort = true }: Analytics
             <Content>
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
-                        <InfoCard title="Sobre">
+                        <InfoCard title="About">
                             <Grid container spacing={2}>
                                 <Grid item xs={6}>
-                                    <Typography variant="subtitle2" color="textSecondary">Ação Executada</Typography>
+                                    <Typography variant="subtitle2" color="textSecondary">Action Performed</Typography>
                                     <Typography>{insight!.action}</Typography>
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <Typography variant="subtitle2" color="textSecondary">Caminho</Typography>
+                                    <Typography variant="subtitle2" color="textSecondary">Path</Typography>
                                     <Typography component={Link} to={insight!.subject} color="primary">
                                         {insight!.subject}
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <Typography variant="subtitle2" color="textSecondary">Total de Acessos</Typography>
+                                    <Typography variant="subtitle2" color="textSecondary">Total Accesses</Typography>
                                     <Typography>{insight!.access_count}</Typography>
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <Typography variant="subtitle2" color="textSecondary">Usuários Distintos</Typography>
+                                    <Typography variant="subtitle2" color="textSecondary">Distinct Users</Typography>
                                     <Typography>{insight!.metrics.length}</Typography>
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <Typography variant="subtitle2" color="textSecondary">Primeiro Acesso</Typography>
+                                    <Typography variant="subtitle2" color="textSecondary">First Access</Typography>
                                     <Typography>{formatDateToShort ? formatToShortDate(insight!.created_at) : formatToLongDate(insight!.created_at)}</Typography>
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <Typography variant="subtitle2" color="textSecondary">Último Acesso</Typography>
+                                    <Typography variant="subtitle2" color="textSecondary">Last Access</Typography>
                                     <Typography>{formatDateToShort ? formatToShortDate(insight!.updated_at) : formatToLongDate(insight!.updated_at)}</Typography>
                                 </Grid>
                             </Grid>
@@ -149,11 +149,11 @@ export const AnalyticsInternalDetails = ({ formatDateToShort = true }: Analytics
                     </Grid>
 
                     <Grid item xs={12}>
-                        <InfoCard title="Histórico de Acessos por Usuário">
+                        <InfoCard title="User Access History">
                             <Table
                                 columns={[
                                     {
-                                        title: 'Nome',
+                                        title: 'Name',
                                         field: 'name',
                                         render: rowData => (
                                             <Link to={`/catalog/${rowData.namespace}/user/${rowData.name}`}>
@@ -162,7 +162,7 @@ export const AnalyticsInternalDetails = ({ formatDateToShort = true }: Analytics
                                         ),
                                     },
                                     {
-                                        title: 'Último Acesso',
+                                        title: 'Last Access',
                                         field: 'updated_at',
                                         render: rowData =>
                                             formatDateToShort ? formatToShortDate(rowData.updated_at) : formatToLongDate(rowData.updated_at)

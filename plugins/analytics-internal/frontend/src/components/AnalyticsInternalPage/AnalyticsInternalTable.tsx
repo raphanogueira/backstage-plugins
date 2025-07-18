@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { InfoCard, Progress, ResponseErrorPanel, Table } from '@backstage/core-components';
 import { Button, Card, CardContent } from '@mui/material';
 import { configApiRef, useApi } from '@backstage/core-plugin-api';
@@ -116,17 +116,17 @@ export const AnalyticsInternalPage = ({ formatDateToShort = true }: AnalyticsInt
       <CardContent>
         <Grid container spacing={3}>
           <Grid item lg={6}>
-            <InfoCard title="Ações Realizadas (Total)">
+            <InfoCard title="Actions Performed (Total)">
               <MostAccessedActionsChart topUsers={topUsers} />
             </InfoCard>
           </Grid>
           <Grid item lg={6}>
-            <InfoCard title="Telas Mais Visitadas">
+            <InfoCard title="Most Visited Screens">
               <MostAccessedScreensChart insights={insights} />
             </InfoCard>
           </Grid>
           <Grid item lg={12}>
-            <InfoCard title="Registro de Atividades">
+            <InfoCard title="Activity Log">
               <Table
                 options={{
                   paging: true,
@@ -136,9 +136,9 @@ export const AnalyticsInternalPage = ({ formatDateToShort = true }: AnalyticsInt
                   }
                 }}
                 columns={[
-                  { title: 'Ação Executada', field: 'action' },
+                  { title: 'Action Performed', field: 'action' },
                   {
-                    title: 'Ação',
+                    title: 'Action',
                     field: 'subject',
                     render: (rowData: any) => (
                       (
@@ -149,27 +149,27 @@ export const AnalyticsInternalPage = ({ formatDateToShort = true }: AnalyticsInt
                     ),
                   },
                   { 
-                    title: 'Total de Acessos', 
+                    title: 'Total Accesses', 
                     field: 'access_count' 
                   },
                   { 
-                    title: 'Primeiro Acesso Em', 
+                    title: 'First Access At', 
                     field: 'created_at', 
                     render: (rowData: AnalyticsInternal) => 
                       formatDateToShort ? formatToShortDate(rowData.created_at) : formatToLongDate(rowData.created_at)
                   },
                   { 
-                    title: 'Último Acesso Em', 
+                    title: 'Last Access At', 
                     field: 'updated_at', 
                     render: (rowData: AnalyticsInternal) => 
                       formatDateToShort ? formatToShortDate(rowData.updated_at) : formatToLongDate(rowData.updated_at)
                   },
                   {
-                    title: 'Detalhes',
+                    title: 'Details',
                     field: 'details',
                     render: (rowData: AnalyticsInternal) => (
                       <Link to={`/analytics-internal/${rowData.id}`}>
-                        <Button variant="outlined">Ver Detalhes</Button>
+                        <Button variant="outlined">View Details</Button>
                       </Link>
                     ),
                   }

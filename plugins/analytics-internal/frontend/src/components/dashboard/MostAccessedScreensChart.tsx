@@ -1,5 +1,4 @@
 import { darken, useTheme } from '@material-ui/core';
-import React from 'react';
 import {
     BarChart,
     Bar,
@@ -42,7 +41,7 @@ export const MostAccessedScreensChart = ({ insights }: MostAccessedScreensChartP
                     interval={0}
                     height={80}
                     tick={({ x, y, payload }) => {
-                        const lines = payload.value.split('/').filter(Boolean); // quebra por "/"
+                        const lines = payload.value.split('/').filter(Boolean);
                         return (
                             <g transform={`translate(${x},${y + 10})`}>
                                 <text textAnchor="middle" fontSize={12} fill="#666">

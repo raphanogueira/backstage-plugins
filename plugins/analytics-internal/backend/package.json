@@ -1,6 +1,6 @@
 {
   "name": "@raphanogueira/plugin-analytics-internal-backend",
-  "version": "0.49.0",
+  "version": "0.0.3",
   "license": "ISC",
   "main": "src/index.ts",
   "types": "src/index.ts",
@@ -9,11 +9,21 @@
   },
   "backstage": {
     "role": "backend-plugin",
-    "pluginId": "analytics-internal-backend"
+    "pluginId": "analytics-internal-backend",
+    "pluginPackages": [
+      "@raphanogueira/plugin-analytics-internal-backend"
+    ]
   },
   "exports": {
     ".": "./src/index.ts",
     "./package.json": "./package.json"
+  },
+  "typesVersions": {
+    "*": {
+      "package.json": [
+        "package.json"
+      ]
+    }
   },
   "sideEffects": false,
   "scripts": {
