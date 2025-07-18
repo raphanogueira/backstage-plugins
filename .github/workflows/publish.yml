@@ -1,5 +1,3 @@
-# .github/workflows/publish-plugin.yml
-
 name: Detect Changes and Publish Plugins to NPM
 
 on:
@@ -67,7 +65,7 @@ jobs:
 
   publish-plugins:
     needs: detect-changes
-    if: fromJson(needs.detect-changes.outputs.changed_plugins) != '[]'
+    if: length(fromJson(needs.detect-changes.outputs.changed_plugins)) > 0
 
     runs-on: ubuntu-latest
     permissions:
