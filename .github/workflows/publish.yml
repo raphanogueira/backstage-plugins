@@ -19,7 +19,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Identificar e filtrar plugins válidos alterados
+      - name: Identificar e filtrar pacotes válidos alterados
         id: filter_changes
         run: |
           # Etapa 1: Obter a lista de todos os arquivos alterados
@@ -33,32 +33,31 @@ jobs:
           
           echo -e "\nArquivos alterados detectados:\n${CHANGED_FILES}"
 
-          # Etapa 2: Extrair os diretórios raiz únicos dos plugins alterados
-          CHANGED_PLUGIN_DIRS=$(echo "${CHANGED_FILES}" | grep -E '^plugins/' | sed -E 's|^(plugins/[^/]+)/.*|\1|' | sort -u)
+          # --- NOVA LÓGICA ---
+          # Etapa 2: Encontrar todos os diretórios de pacotes (que contêm package.json) dentro de 'plugins/'
+          ALL_PACKAGE_DIRS=$(find plugins -name "package.json" -exec dirname {} \; | sort -u)
+          echo -e "\nTodos os diretórios de pacotes encontrados no repositório:\n${ALL_PACKAGE_DIRS}"
 
-          # --- LÓGICA PRINCIPAL ---
-          # Etapa 3: Verificar quais dos diretórios alterados realmente contêm um 'package.json'
+          # Etapa 3: Identificar quais pacotes tiveram alterações
           VALID_PLUGIN_DIRS=()
-          if [[ -n "$CHANGED_PLUGIN_DIRS" ]]; then
-              for dir in $CHANGED_PLUGIN_DIRS; do
-                  # Verifica se o arquivo package.json existe no diretório
-                  if [ -f "${dir}/package.json" ]; then
-                      VALID_PLUGIN_DIRS+=("$dir")
-                  else
-                      echo "-> Ignorando '${dir}': 'package.json' não encontrado."
-                  fi
-              done
+          if [[ -n "$ALL_PACKAGE_DIRS" ]]; then
+            for pkg_dir in $ALL_PACKAGE_DIRS; do
+              # Verifica se algum arquivo alterado começa com o caminho do diretório do pacote.
+              # A barra no final garante que 'plugins/a' não corresponda a 'plugins/ab'.
+              if echo "${CHANGED_FILES}" | grep -q -E "^${pkg_dir}/"; then
+                VALID_PLUGIN_DIRS+=("$pkg_dir")
+              fi
+            done
           fi
 
-          # Etapa 4: Gerar o output JSON apenas com os plugins válidos
+          # Etapa 4: Gerar o output JSON apenas com os pacotes alterados
           if [ ${#VALID_PLUGIN_DIRS[@]} -eq 0 ]; then
-              echo -e "\nNenhum plugin válido (com package.json) foi alterado."
+              echo -e "\nNenhum pacote válido foi alterado."
               echo "plugins=[]" >> $GITHUB_OUTPUT
           else
-              echo -e "\nPlugins válidos para publicação:"
+              echo -e "\nPacotes válidos para publicação:"
               printf '%s\n' "${VALID_PLUGIN_DIRS[@]}"
               
-              # Converte o array bash para um array JSON para o próximo job
               JSON_ARRAY=$(printf '%s\n' "${VALID_PLUGIN_DIRS[@]}" | jq -R . | jq -sc .)
               echo "plugins=${JSON_ARRAY}" >> $GITHUB_OUTPUT
           fi
@@ -92,7 +91,7 @@ jobs:
       - name: Gerar Arquivos de Definição de Tipos (.d.ts)
         run: yarn tsc
 
-      - name: Construir o Plugin (${{ matrix.plugin_dir }})
+      - name: Construir o Pacote (${{ matrix.plugin_dir }})
         run: yarn --cwd ${{ matrix.plugin_dir }} build
 
       - name: Publicar no NPM (${{ matrix.plugin_dir }})
