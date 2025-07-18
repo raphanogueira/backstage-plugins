@@ -31,4 +31,4 @@ For installation instructions and more details on how this package works, [pleas
 
 For installation instructions and more details on how this package works, [please refer to the module's README](./module/README.md).
 
-**Important Note**: This package is tightly coupled with the `plugin-analytics-internal-backend`. Misconfiguration can lead to errors, as it is designed to consume data from the backend plugin. 
+**Important Note**: This package is tightly coupled with the `plugin-analytics-internal-backend`. Misconfiguration can lead to errors, as it is designed to consume data from the backend plugin.
