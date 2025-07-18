@@ -1,6 +1,6 @@
 {
   "name": "@raphanogueira/plugin-analytics-internal-frontend",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "license": "ISC",
   "exports": {
     ".": "./src/index.ts",
@@ -31,12 +31,13 @@
   },
   "sideEffects": false,
   "scripts": {
-    "build": " backstage-cli package build",
-    "lint": "backstage-cli package lint",
-    "test": "backstage-cli package test",
+    "build": "backstage-cli package build",
     "clean": "backstage-cli package clean",
-    "typecheck": "tsc --noEmit",
-    "tsc": "tsc --emitDeclarationOnly"
+    "lint": "backstage-cli package lint",
+    "prepack": "backstage-cli package prepack",
+    "postpack": "backstage-cli package postpack",
+    "start": "backstage-cli package start",
+    "test": "backstage-cli package test"
   },
   "dependencies": {
     "@backstage/core-components": "^0.17.4",
@@ -72,4 +73,4 @@
   "files": [
     "dist"
   ]
-} 
+}
