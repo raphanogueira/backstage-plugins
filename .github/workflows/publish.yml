@@ -24,46 +24,66 @@ jobs:
         run: |
           # Etapa 1: Obter a lista de todos os arquivos alterados
           if [[ "${{ github.event.before }}" == "0000000000000000000000000000000000000000" ]]; then
-            echo "Nova branch ou primeiro push. Verificando todos os arquivos rastreados."
             CHANGED_FILES=$(git ls-files)
           else
-            echo "Push em branch existente. Comparando commits."
             CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
           fi
           
-          echo -e "\nArquivos alterados detectados:\n${CHANGED_FILES}"
-
-          # --- NOVA LÓGICA ---
-          # Etapa 2: Encontrar todos os diretórios de pacotes (que contêm package.json) dentro de 'plugins/'
+          # Etapa 2: Encontrar todos os diretórios de pacotes
           ALL_PACKAGE_DIRS=$(find plugins -name "package.json" -exec dirname {} \; | sort -u)
-          echo -e "\nTodos os diretórios de pacotes encontrados no repositório:\n${ALL_PACKAGE_DIRS}"
-
+          
           # Etapa 3: Identificar quais pacotes tiveram alterações
           VALID_PLUGIN_DIRS=()
           if [[ -n "$ALL_PACKAGE_DIRS" ]]; then
             for pkg_dir in $ALL_PACKAGE_DIRS; do
-              # Verifica se algum arquivo alterado começa com o caminho do diretório do pacote.
-              # A barra no final garante que 'plugins/a' não corresponda a 'plugins/ab'.
               if echo "${CHANGED_FILES}" | grep -q -E "^${pkg_dir}/"; then
                 VALID_PLUGIN_DIRS+=("$pkg_dir")
               fi
             done
           fi
-
-          # Etapa 4: Gerar o output JSON apenas com os pacotes alterados
+          
+          # Etapa 4: Gerar o output JSON
           if [ ${#VALID_PLUGIN_DIRS[@]} -eq 0 ]; then
-              echo -e "\nNenhum pacote válido foi alterado."
-              echo "plugins=[]" >> $GITHUB_OUTPUT
+            echo "plugins=[]" >> $GITHUB_OUTPUT
           else
-              echo -e "\nPacotes válidos para publicação:"
-              printf '%s\n' "${VALID_PLUGIN_DIRS[@]}"
-              
-              JSON_ARRAY=$(printf '%s\n' "${VALID_PLUGIN_DIRS[@]}" | jq -R . | jq -sc .)
-              echo "plugins=${JSON_ARRAY}" >> $GITHUB_OUTPUT
+            JSON_ARRAY=$(printf '%s\n' "${VALID_PLUGIN_DIRS[@]}" | jq -R . | jq -sc .)
+            echo "plugins=${JSON_ARRAY}" >> $GITHUB_OUTPUT
           fi
 
-  publish-plugins:
+  build-workspace:
     needs: detect-changes
+    if: needs.detect-changes.outputs.changed_plugins != '[]'
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout do Repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+
+      - name: Instalar Dependências
+        run: yarn install --frozen-lockfile
+
+      - name: Construir todo o monorepo
+        run: |
+          # Executa o build de tipos e depois o build dos pacotes a partir da raiz
+          yarn tsc
+          yarn build
+
+      - name: Carregar artefatos de build
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: |
+            .
+            !node_modules/**
+
+  publish-plugins:
+    needs: [detect-changes, build-workspace]
     if: needs.detect-changes.outputs.changed_plugins != '[]'
 
     runs-on: ubuntu-latest
@@ -75,24 +95,16 @@ jobs:
         plugin_dir: ${{ fromJson(needs.detect-changes.outputs.changed_plugins) }}
 
     steps:
-      - name: Checkout do Repositório
-        uses: actions/checkout@v4
-
       - name: Configurar Node.js e Autenticação NPM
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           registry-url: 'https://registry.npmjs.org'
-          cache: 'yarn'
 
-      - name: Instalar Dependências
-        run: yarn install --frozen-lockfile
-
-      - name: Gerar Arquivos de Definição de Tipos (.d.ts)
-        run: yarn tsc
-
-      - name: Construir o Pacote (${{ matrix.plugin_dir }})
-        run: yarn --cwd ${{ matrix.plugin_dir }} build
+      - name: Baixar artefatos de build
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
 
       - name: Publicar no NPM (${{ matrix.plugin_dir }})
         run: npm publish --access public
