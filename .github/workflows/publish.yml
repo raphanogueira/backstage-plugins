@@ -72,7 +72,7 @@ jobs:
         run: |
           # Executa o build de tipos e depois o build dos pacotes a partir da raiz
           yarn tsc
-          yarn build
+          yarn build:all
 
       - name: Carregar artefatos de build
         uses: actions/upload-artifact@v4
