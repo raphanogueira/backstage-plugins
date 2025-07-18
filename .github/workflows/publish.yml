@@ -75,14 +75,14 @@ jobs:
     if: needs.detect-changes.outputs.changed_plugins != '[]'
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
 
     strategy:
       matrix:
         plugin_dir: ${{ fromJson(needs.detect-changes.outputs.changed_plugins) }}
 
     steps:
-      - name: Configurar Node.js e Autenticação NPM
+      - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
@@ -96,6 +96,9 @@ jobs:
       - name: Instalar Dependências (incluindo devDependencies)
         run: yarn install --immutable
       
+      - name: Autenticar com o NPM via Yarn
+        run: yarn config set npmAuthToken ${{ secrets.NPM_TOKEN }}
+
       - name: Publicar no NPM via Yarn (${{ matrix.plugin_dir }})
         run: yarn npm publish --access public
         working-directory: ${{ matrix.plugin_dir }}
