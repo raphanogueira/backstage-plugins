@@ -46,6 +46,8 @@ jobs:
     needs: detect-changes
     if: needs.detect-changes.outputs.changed_plugins != '[]'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout do Repositório
         uses: actions/checkout@v4
