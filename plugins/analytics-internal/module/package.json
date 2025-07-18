@@ -1,0 +1,70 @@
+{
+  "name": "@raphanogueira/plugin-analytics-internal-module",
+  "version": "0.0.2",
+  "license": "ISC",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./package.json": "./package.json"
+  },
+  "typesVersions": {
+    "*": {
+      "package.json": [
+        "package.json"
+      ]
+    }
+  },
+  "backstage": {
+    "role": "frontend-plugin",
+    "pluginId": "analytics-internal-module",
+    "pluginPackages": [
+      "@raphanogueira/plugin-analytics-internal-module"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/raphanogueira/analytics-internal.git"
+  },
+  "sideEffects": false,
+  "scripts": {
+    "build": "backstage-cli package build",
+    "clean": "backstage-cli package clean",
+    "lint": "backstage-cli package lint",
+    "prepack": "backstage-cli package prepack",
+    "postpack": "backstage-cli package postpack",
+    "start": "backstage-cli package start",
+    "test": "backstage-cli package test"
+  },
+  "dependencies": {
+    "@backstage/core-plugin-api": "^1.10.9",
+    "@backstage/errors": "^1.2.7",
+    "@backstage/types": "^1.2.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-router-dom": "^6.11.2"
+  },
+  "devDependencies": {
+    "@backstage/cli": "^0.33.1",
+    "@backstage/test-utils": "^1.7.10",
+    "@testing-library/dom": "^9.3.3",
+    "@testing-library/jest-dom": "^6.1.5",
+    "@testing-library/react": "^14.1.2",
+    "@testing-library/user-event": "^14.5.1",
+    "@types/jest": "^29.5.11",
+    "@types/node": "^20.10.6",
+    "@types/react": "^17.0.65",
+    "@types/react-dom": "^17.0.20",
+    "cross-fetch": "^4.0.0",
+    "msw": "^2.0.9",
+    "typescript": "^5.3.3"
+  },
+  "files": [
+    "dist",
+    "config.d.ts"
+  ],
+  "configSchema": "config.d.ts"
+}

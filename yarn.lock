@@ -9646,9 +9646,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@raphanogueira/plugin-analytics-internal-backend@workspace:^, @raphanogueira/plugin-analytics-internal-backend@workspace:plugins/plugin-analytics-internal-backend":
+"@raphanogueira/plugin-analytics-internal-backend@workspace:^, @raphanogueira/plugin-analytics-internal-backend@workspace:plugins/analytics-internal/backend":
   version: 0.0.0-use.local
-  resolution: "@raphanogueira/plugin-analytics-internal-backend@workspace:plugins/plugin-analytics-internal-backend"
+  resolution: "@raphanogueira/plugin-analytics-internal-backend@workspace:plugins/analytics-internal/backend"
   dependencies:
     "@backstage/backend-common": "npm:^0.25.0"
     "@backstage/backend-plugin-api": "npm:^1.4.1"
@@ -9676,9 +9676,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@raphanogueira/plugin-analytics-internal-frontend@workspace:^, @raphanogueira/plugin-analytics-internal-frontend@workspace:plugins/plugin-analytics-internal-frontend":
+"@raphanogueira/plugin-analytics-internal-frontend@workspace:^, @raphanogueira/plugin-analytics-internal-frontend@workspace:plugins/analytics-internal/frontend":
   version: 0.0.0-use.local
-  resolution: "@raphanogueira/plugin-analytics-internal-frontend@workspace:plugins/plugin-analytics-internal-frontend"
+  resolution: "@raphanogueira/plugin-analytics-internal-frontend@workspace:plugins/analytics-internal/frontend"
   dependencies:
     "@backstage/cli": "npm:^0.33.1"
     "@backstage/core-app-api": "npm:^1.18.0"
@@ -9709,9 +9709,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@raphanogueira/plugin-analytics-internal-module@workspace:^, @raphanogueira/plugin-analytics-internal-module@workspace:plugins/plugin-analytics-internal-module":
+"@raphanogueira/plugin-analytics-internal-module@workspace:^, @raphanogueira/plugin-analytics-internal-module@workspace:plugins/analytics-internal/module":
   version: 0.0.0-use.local
-  resolution: "@raphanogueira/plugin-analytics-internal-module@workspace:plugins/plugin-analytics-internal-module"
+  resolution: "@raphanogueira/plugin-analytics-internal-module@workspace:plugins/analytics-internal/module"
   dependencies:
     "@backstage/cli": "npm:^0.33.1"
     "@backstage/core-plugin-api": "npm:^1.10.9"

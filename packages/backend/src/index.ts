@@ -7,7 +7,6 @@
  */
 
 import { createBackend } from '@backstage/backend-defaults';
-import { analyticsPlugin } from '@raphanogueira/plugin-analytics-internal-backend';
 
 const backend = createBackend();
 
@@ -54,6 +53,6 @@ backend.add(import('@backstage/plugin-search-backend-module-techdocs'));
 // kubernetes
 backend.add(import('@backstage/plugin-kubernetes-backend'));
 
-backend.add(analyticsPlugin);
+backend.add(import('@raphanogueira/plugin-analytics-internal-backend'));
 
 backend.start();
