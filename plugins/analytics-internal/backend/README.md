@@ -1,4 +1,4 @@
-# analytics-internal-backend
+# @raphanogueira/plugin-analytics-internal-backend
 
 This plugin is responsible for providing the routes and database structure to manage analytics-related information. With it, you can manage the information without needing an external system.
 

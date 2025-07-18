@@ -76,7 +76,7 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
         <SidebarItem icon={ExtensionIcon} to="api-docs" text="APIs" />
         <SidebarItem icon={LibraryBooks} to="docs" text="Docs" />
         <SidebarItem icon={CreateComponentIcon} to="create" text="Create..." />
-        <SidebarItem icon={MetricIcon} to="analytics-internal" text="Métricas" />
+        <SidebarItem icon={MetricIcon} to="analytics-internal" text="Metrics" />
         {/* End global nav */}
         <SidebarDivider />
         <SidebarScrollWrapper>

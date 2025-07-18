@@ -1,9 +1,17 @@
-# The Plugins Folder
+# @raphanogueira/backstage backstage.io open source plugins
 
-This is where your own plugins and their associated modules live, each in a
-separate folder of its own.
+Hello! 👋 This repository is a dedicated space for creating and maintaining open-source plugins for the **Backstage.io** platform.
 
-If you want to create a new plugin here, go to your project root directory, run
-the command `yarn new`, and follow the on-screen instructions.
+## Objective
 
-You can also check out existing plugins on [the plugin marketplace](https://backstage.io/plugins)!
+The main idea is to develop tools that solve common problems and add new functionalities to Backstage, helping other people and teams in their daily development workflow. All plugins here are created with the intention of being shared with the community.
+
+## Available Plugins
+
+Below are the plugins currently maintained in this repository. Click on one to see its detailed documentation, including how to install and configure it.
+
+* **[Analytics Internal](./packages/internal-analytics)** - A plugin to collect and visualize user activity (screen views, actions, etc.) directly within Backstage, without the need for external tools.
+
+---
+
+Feel free to explore, use, and contribute to the projects!

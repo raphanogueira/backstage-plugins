@@ -1,4 +1,4 @@
-# analytics-internal-frontend
+# @raphanogueira/plugin-analytics-internal-frontend
 
 This plugin is responsible for managing the metrics screens.
 

@@ -1,34 +1,34 @@
 # Analytics Internal plugin for Backstage
 
-This is the Analytics Internal plugin for Backstage.io
+This is the Analytics Internal plugin for Backstage.io.
 
 ![Analytics Example](../../docs/images/screen-example.png)
 
 ![Analytics Detail Example](../../docs/images/screen-detail-example.png)
 
-Esse plugin serve para ter uma visão do que está sendo acessado pelos seus usuários dentro do backstage.io sem precisar se comunicar com alguma ferramenta externa. Mas também possibilitando caso queira enviar eventos para alguma plataforma.
+This plugin provides insights into user activity within your Backstage.io instance, natively and without the need for external analytics tools. It also offers the flexibility to forward these events to other platforms if required.
 
-Você pode obter as seguinte informações:
- - Telas acessadas
- - Ações executadas
- - Número de acessos
- - Quando foi feito o primeiro e último acesso.
- - Visão de detalhe dos elementos na listagem, podendo visualizar quem foram as pessoas que acessaram esse caminho.
+You can obtain the following information:
+ - Screen views
+ - Actions performed by users
+ - Access counts per item
+ - Timestamps for the first and last access
+ - A detailed view for each item, allowing you to identify which users have accessed it.
 
 # Analytics Internal Backend
 
-Para instalar o pacote backend e ter mais infomações sobre o funcionamento do plugin basta clicar em [Saiba mais](./backend/README.md)
+For installation instructions and more details on how this package works, [please refer to the backend's README](./backend/README.md).
 
-**Ponto de Atenção**: Não possui acoplamento com os outros pacotes ele funciona por conta propria.
+**Important Note**: This package operates independently and is decoupled from other analytics packages.
 
 # Analytics Internal Frontend
 
-Para instalar o pacote frontend e ter mais informações sobre o funcionamendo do plugin basta clicar em [Saiba mais](./frontend/README.md)
+For installation instructions and more details on how this package works, [please refer to the frontend's README](./frontend/README.md).
 
-**Ponto de Atenção**: Possui um alto acoplamento com o pacote [plugin-analytics-internal-backend](#analytics-internal-backend)
+**Important Note**: This package is tightly coupled with the `plugin-analytics-internal-backend` package and depends on it to function.
 
 # Analytics Internal Module
 
-Para intalar o pacote de modulo e ter mais informações sobre o funcionamento do plugin basta clicar em [Saiba mais](./module/README.md)
+For installation instructions and more details on how this package works, [please refer to the module's README](./module/README.md).
 
-**Ponto de Atenção**: Possui um alto acoplamento com o pacote [plugin-analytics-internal-backend](#analytics-internal-backend) podendo gerar possiveis erros caso o plugin não seja configurado da maneira correta para não consumir do [plugin-analytics-internal-backend](#analytics-internal-backend)
+**Important Note**: This package is tightly coupled with the `plugin-analytics-internal-backend`. Misconfiguration can lead to errors, as it is designed to consume data from the backend plugin.
