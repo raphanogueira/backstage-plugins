@@ -1,1 +1,5 @@
+/.github/workflows/branch-naming-check.yml @raphanogueira
+/.github/workflows/publish.yml @raphanogueira
+/CODEOWNERS @raphanogueira
+
 * @raphanogueira
