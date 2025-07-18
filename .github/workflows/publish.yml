@@ -8,65 +8,71 @@ on:
       - master
 
 jobs:
-  # --- JOB 1: Detectar quais plugins foram alterados ---
   detect-changes:
     runs-on: ubuntu-latest
     permissions:
       contents: read
     outputs:
-      # Exporta a lista de plugins alterados para ser usada por outros jobs
       changed_plugins: ${{ steps.filter_changes.outputs.plugins }}
 
     steps:
       - name: Checkout do Repositório
         uses: actions/checkout@v4
         with:
-          # É necessário buscar o histórico completo para comparar as alterações
           fetch-depth: 0
 
-      - name: Identificar e filtrar plugins alterados
+      - name: Identificar e filtrar plugins válidos alterados
         id: filter_changes
         run: |
-          # Adicionamos uma verificação para o 'commit anterior'
+          # Etapa 1: Obter a lista de todos os arquivos alterados
           if [[ "${{ github.event.before }}" == "0000000000000000000000000000000000000000" ]]; then
-            echo "Nova branch ou primeiro push detectado. Verificando todos os arquivos."
-            # Se for uma nova branch, pega todos os arquivos do commit atual
+            echo "Nova branch ou primeiro push. Verificando todos os arquivos rastreados."
             CHANGED_FILES=$(git ls-files)
           else
             echo "Push em branch existente. Comparando commits."
-            # Se for um push normal, usa o git diff como antes
             CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
           fi
+          
+          echo -e "\nArquivos alterados detectados:\n${CHANGED_FILES}"
 
-          # Filtra os diretórios dos plugins a partir do caminho raiz 'plugins/'
+          # Etapa 2: Extrair os diretórios raiz únicos dos plugins alterados
           CHANGED_PLUGIN_DIRS=$(echo "${CHANGED_FILES}" | grep -E '^plugins/' | sed -E 's|^(plugins/[^/]+)/.*|\1|' | sort -u)
 
-          if [[ -z "$CHANGED_PLUGIN_DIRS" ]]; then
-            echo "Nenhum plugin foi alterado."
-            echo "plugins=[]" >> $GITHUB_OUTPUT
-          else
-            echo "Plugins alterados encontrados:"
-            echo "$CHANGED_PLUGIN_DIRS"
-            #
-            # A CORREÇÃO ESTÁ AQUI: Adicionada a flag '-c' (compact) ao jq
-            #
-            JSON_ARRAY=$(echo "$CHANGED_PLUGIN_DIRS" | jq -R . | jq -sc .)
-            echo "plugins=${JSON_ARRAY}" >> $GITHUB_OUTPUT
+          # --- LÓGICA PRINCIPAL ---
+          # Etapa 3: Verificar quais dos diretórios alterados realmente contêm um 'package.json'
+          VALID_PLUGIN_DIRS=()
+          if [[ -n "$CHANGED_PLUGIN_DIRS" ]]; then
+              for dir in $CHANGED_PLUGIN_DIRS; do
+                  # Verifica se o arquivo package.json existe no diretório
+                  if [ -f "${dir}/package.json" ]; then
+                      VALID_PLUGIN_DIRS+=("$dir")
+                  else
+                      echo "-> Ignorando '${dir}': 'package.json' não encontrado."
+                  fi
+              done
           fi
 
+          # Etapa 4: Gerar o output JSON apenas com os plugins válidos
+          if [ ${#VALID_PLUGIN_DIRS[@]} -eq 0 ]; then
+              echo -e "\nNenhum plugin válido (com package.json) foi alterado."
+              echo "plugins=[]" >> $GITHUB_OUTPUT
+          else
+              echo -e "\nPlugins válidos para publicação:"
+              printf '%s\n' "${VALID_PLUGIN_DIRS[@]}"
+              
+              # Converte o array bash para um array JSON para o próximo job
+              JSON_ARRAY=$(printf '%s\n' "${VALID_PLUGIN_DIRS[@]}" | jq -R . | jq -sc .)
+              echo "plugins=${JSON_ARRAY}" >> $GITHUB_OUTPUT
+          fi
 
-  # --- JOB 2: Publicar os plugins que foram alterados ---
   publish-plugins:
-    # Este job só executa se o job 'detect-changes' for bem-sucedido
     needs: detect-changes
-    # E só executa se a lista de plugins não estiver vazia
     if: fromJson(needs.detect-changes.outputs.changed_plugins) != '[]'
 
     runs-on: ubuntu-latest
     permissions:
       contents: read
 
-    # Cria uma "matriz" de execução. Este job irá rodar uma vez para cada item no array 'changed_plugins'.
     strategy:
       matrix:
         plugin_dir: ${{ fromJson(needs.detect-changes.outputs.changed_plugins) }}
@@ -78,7 +84,7 @@ jobs:
       - name: Configurar Node.js e Autenticação NPM
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '20'
           registry-url: 'https://registry.npmjs.org'
           cache: 'yarn'
 
@@ -86,8 +92,6 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Gerar Arquivos de Definição de Tipos (.d.ts)
-        # Este comando compila todo o projeto e cria os arquivos .d.ts
-        # que o passo de 'build' de cada plugin precisa para funcionar.
         run: yarn tsc
 
       - name: Construir o Plugin (${{ matrix.plugin_dir }})
