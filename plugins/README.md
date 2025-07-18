@@ -10,6 +10,6 @@ The main idea is to develop tools that solve common problems and add new functio
 
 Below are the plugins currently maintained in this repository. Click on one to see its detailed documentation, including how to install and configure it.
 
-* **[Analytics Internal](./packages/internal-analytics)** - A plugin to collect and visualize user activity (screen views, actions, etc.) directly within Backstage, without the need for external tools.
+* **[Analytics Internal](./analytics-internal/README.md)** - A plugin to collect and visualize user activity (screen views, actions, etc.) directly within Backstage, without the need for external tools.
 
 Feel free to explore, use, and contribute to the projects!
