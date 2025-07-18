@@ -22,17 +22,12 @@ jobs:
       - name: Identificar e filtrar pacotes válidos alterados
         id: filter_changes
         run: |
-          # Etapa 1: Obter a lista de todos os arquivos alterados
           if [[ "${{ github.event.before }}" == "0000000000000000000000000000000000000000" ]]; then
             CHANGED_FILES=$(git ls-files)
           else
             CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
           fi
-          
-          # Etapa 2: Encontrar todos os diretórios de pacotes
           ALL_PACKAGE_DIRS=$(find plugins -name "package.json" -exec dirname {} \; | sort -u)
-          
-          # Etapa 3: Identificar quais pacotes tiveram alterações
           VALID_PLUGIN_DIRS=()
           if [[ -n "$ALL_PACKAGE_DIRS" ]]; then
             for pkg_dir in $ALL_PACKAGE_DIRS; do
@@ -41,8 +36,6 @@ jobs:
               fi
             done
           fi
-          
-          # Etapa 4: Gerar o output JSON
           if [ ${#VALID_PLUGIN_DIRS[@]} -eq 0 ]; then
             echo "plugins=[]" >> $GITHUB_OUTPUT
           else
@@ -58,22 +51,17 @@ jobs:
     steps:
       - name: Checkout do Repositório
         uses: actions/checkout@v4
-
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'yarn'
-
       - name: Instalar Dependências
         run: yarn install --frozen-lockfile
-
       - name: Construir todo o monorepo
         run: |
-          # Executa o build de tipos e depois o build dos pacotes a partir da raiz
           yarn tsc
           yarn build:all
-
       - name: Carregar artefatos de build
         uses: actions/upload-artifact@v4
         with:
@@ -85,7 +73,6 @@ jobs:
   publish-plugins:
     needs: [detect-changes, build-workspace]
     if: needs.detect-changes.outputs.changed_plugins != '[]'
-
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -105,6 +92,9 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-artifacts
+
+      - name: Instalar Dependências de Produção
+        run: yarn install --frozen-lockfile --production
 
       - name: Publicar no NPM (${{ matrix.plugin_dir }})
         run: npm publish --access public
