@@ -65,7 +65,7 @@ jobs:
 
   publish-plugins:
     needs: detect-changes
-    if: length(fromJson(needs.detect-changes.outputs.changed_plugins)) > 0
+    if: needs.detect-changes.outputs.changed_plugins != '[]'
 
     runs-on: ubuntu-latest
     permissions:
