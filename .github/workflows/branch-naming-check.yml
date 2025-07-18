@@ -1,0 +1,22 @@
+name: 'Branch Naming Check'
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+
+jobs:
+  check-branch-name:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Check branch name convention'
+        uses: deepakputhraya/action-branch-name@master
+        with:
+          regex: '^(feature|bugfix|hotfix)\/[a-zA-Z0-9_-]+'
+          error_message: |
+            Your branch name does not follow the convention!
+            Please use one of the following prefixes: feature/, bugfix/, hotfix/.
+            Examples:
+              - feature/new-login-screen
+              - bugfix/fix-broken-button
+              - hotfix/urgent-production-fix
+          github_token: ${{ secrets.GITHUB_TOKEN }}
