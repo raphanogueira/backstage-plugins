@@ -24,6 +24,7 @@ export class AuthDatabase {
   static async runMigrations(knex: Knex): Promise<void> {
     await knex.migrate.latest({
       directory: migrationsDir,
+      tableName: 'knex_migrations_analytics_internal',
     });
   }
 
